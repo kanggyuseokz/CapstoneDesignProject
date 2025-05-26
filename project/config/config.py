@@ -1,11 +1,27 @@
-class Config:
-    SQLALCHEMY_DATABASE_URI = 'mysql+pymysql://root:1234@localhost/attack_logs'
-    SQLALCHEMY_TRACK_MODIFICATIONS = False
-    SECRET_KEY = 'CmNZZ7dL_fIylz6d2Rh5W2oL_NSSwOrTfAZ-e91Ujjw'
+import os
+from dotenv import load_dotenv
 
-    MAIL_SERVER = 'smtp.gmail.com'
-    MAIL_PORT = 587
-    MAIL_USE_TLS = True
-    MAIL_USERNAME = 'kgs021225@gmail.com'   # 관리자 이메일
-    MAIL_PASSWORD = 'vlxo fkbo zsyw otka'      # 앱 비밀번호 (Google 계정 → 앱 비밀번호 생성 필요)
-    MAIL_DEFAULT_SENDER = 'kgs021225@gmail.com'
+load_dotenv()
+
+class Config:
+    SECRET_KEY = os.getenv("SECRET_KEY", "default-secret")
+
+    DB_USER = os.getenv("DB_USER")
+    DB_PASSWORD = os.getenv("DB_PASSWORD")
+    DB_HOST = os.getenv("DB_HOST", "localhost")
+    DB_NAME = os.getenv("DB_NAME")
+
+    SQLALCHEMY_DATABASE_URI = (
+        f"mysql+pymysql://{DB_USER}:{DB_PASSWORD}@{DB_HOST}/{DB_NAME}"
+    )
+
+    SQLALCHEMY_TRACK_MODIFICATIONS = False
+
+    # 메일 설정
+    MAIL_SERVER = os.getenv("MAIL_SERVER")
+    MAIL_PORT = int(os.getenv("MAIL_PORT", 587))
+    MAIL_USE_TLS = os.getenv("MAIL_USE_TLS", "true").lower() in ("true", "1", "yes")
+    MAIL_USERNAME = os.getenv("MAIL_USERNAME")
+    MAIL_PASSWORD = os.getenv("MAIL_PASSWORD")
+    MAIL_DEFAULT_SENDER = os.getenv("MAIL_DEFAULT_SENDER")
+    ALERT_RECIPIENT = os.getenv("ALERT_RECIPIENT")

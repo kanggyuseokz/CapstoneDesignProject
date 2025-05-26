@@ -9,7 +9,7 @@ def send_attack_alert_mail(app, attack_type, user_input, cleaned_text):
 
     msg = Message(
         subject=f"[경고] {attack_type} 공격 발생!",
-        recipients=['gnlvkfka1592@gmail.com'],  # 관리자 이메일
+        recipients=[current_app.config["ALERT_RECIPIENT"]],  # 관리자 이메일
         body=f"""[보안 경고] {attack_type} 공격 탐지됨!
             시간: {user_input.timestamp.strftime('%Y-%m-%d %H:%M:%S')}
             사용자: {user_input.user.username} ({user_input.user.ip})
